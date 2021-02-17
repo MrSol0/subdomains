@@ -9,7 +9,8 @@ import socket
 
 print("[SYNTAX]: google.com")
 searchDomain = input("[DOMAIN NAME]: ")
-domains = {}
+updomains = {}
+downdomains = {}
 
 UID = "d287690c-99ce-4101-8283-30b7bb6b2d02"
 SECRET = "UiQz2prqsn2FNymZiTpdN9XtwVuI0VAL"
@@ -19,15 +20,23 @@ fields = ["parsed.names"]
 
 for c in certificates.search(searchDomain, fields=fields, max_records=1000):
     domain = c["parsed.names"][0].replace("*.","").replace("www.","")
-    if not domains.get(domain) and (("."+searchDomain in domain) or searchDomain == domain):
+    if not updomains.get(domain) and not downdomains.get(domain) and (("."+searchDomain in domain) or searchDomain == domain):
         try:
             ip = socket.gethostbyname(domain)
+            updomains[domain] = ip
         except:
-            ip = "0.0.0.0"
-        domains[domain] = ip
+            downdomains[domain] = True
 
-if domains:
-    for name in domains.items():
+if updomains:
+    print("--------------------------")
+    print("-=-=-=- DOMAINS UP -=-=-=-")
+    print("--------------------------")
+    for name in updomains.items():
         print('DOMAIN: {}, IP: {}'.format(name[0],name[1]))
-else:
-    print("No subdomains found :(")
+
+if downdomains:
+    print("--------------------------")
+    print("=-=-=- DOMAINS DOWN -=-=-=")
+    print("--------------------------")
+    for name in downdomains.items():
+        print('DOMAIN: {}'.format(name[0]))
