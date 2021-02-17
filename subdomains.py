@@ -12,8 +12,8 @@ searchDomain = input("[DOMAIN NAME]: ")
 updomains = {}
 downdomains = {}
 
-UID = "d287690c-99ce-4101-8283-30b7bb6b2d02"
-SECRET = "UiQz2prqsn2FNymZiTpdN9XtwVuI0VAL"
+UID = ""
+SECRET = ""
 
 certificates = censys.certificates.CensysCertificates(UID, SECRET)
 fields = ["parsed.names"]
