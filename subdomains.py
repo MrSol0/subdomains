@@ -19,8 +19,12 @@ certificates = censys.certificates.CensysCertificates(UID, SECRET)
 fields = ["parsed.names"]
 
 for c in certificates.search(searchDomain, fields=fields, max_records=1000):
-    domain = c["parsed.names"][0].replace("*.","").replace("www.","")
-    if not updomains.get(domain) and not downdomains.get(domain) and (("."+searchDomain in domain) or searchDomain == domain):
+    try:
+        domain = c["parsed.names"][0].replace("*.", "").replace("www.", "")
+    except:
+        continue
+
+    if not updomains.get(domain) and not downdomains.get(domain) and domain.endswith(searchDomain) and (("."+searchDomain in domain) or searchDomain == domain):
         try:
             ip = socket.gethostbyname(domain)
             updomains[domain] = ip
